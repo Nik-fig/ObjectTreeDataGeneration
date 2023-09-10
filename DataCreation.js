@@ -14,6 +14,7 @@ function generateTree({countNodes, maxCountChildAtNode = 3}) {
         if (!previousLevelNodes) {
             currentLevelNodes.push({
                 id: 1,
+                parent: null,
                 properties: generateRandomProperties({}),
             });
             foo(currentLevelNodes);
@@ -33,6 +34,7 @@ function generateTree({countNodes, maxCountChildAtNode = 3}) {
                 for (let i = 0; i < countChildren; i++) {
                     const child = {
                         id: lastChildId + 1,
+                        parent: node.id,
                         properties: generateRandomProperties({})
                     }
                     node.children.push(child);
@@ -72,7 +74,7 @@ function generateTree({countNodes, maxCountChildAtNode = 3}) {
     return [generateByLevelsRecursion(), nodesList];
 }
 
-const [tree, list] = generateTree({countNodes: 3000});
+const [tree, list] = generateTree({countNodes: 10});
 
 fs.writeFileSync('./dataTree.json', JSON.stringify(tree[0]));
 fs.writeFileSync('./dataList.json', JSON.stringify(list))
