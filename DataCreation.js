@@ -1,9 +1,10 @@
 const randomString = require('randomString');
 const fs = require('fs');
-const generateRandomProperties = require('generateRandomProperties')
-const getRandomInt = require('getRandomInt');
+const generateRandomProperties = require('./generateRandomProperties')
+const getRandomInt = require('./getRandomInt');
 
 function generateTree({countNodes, maxCountChildAtNode = 3}) {
+    const nodesList = [];
     const generateByLevelsRecursion = function foo(
         previousLevelNodes,
     ) {
@@ -40,6 +41,24 @@ function generateTree({countNodes, maxCountChildAtNode = 3}) {
                 }
             }
 
+            nodesList.push(...previousLevelNodes.map(
+                node => {
+                    childsIds = node.children.map(ch => ch.id)
+                    return {
+                        ...node, children: childsIds
+                    }
+                }
+            ))
+
+            if (currentLevelNodes.at(-1).id == countNodes)
+                nodesList.push(...currentLevelNodes.map(
+                    node => {
+                        return {
+                            ...node, children: []
+                        }
+                    }
+                ))
+
             if (currentLevelNodes.at(-1).id !== countNodes)
                 foo(currentLevelNodes);
 
@@ -50,9 +69,10 @@ function generateTree({countNodes, maxCountChildAtNode = 3}) {
 
     }
 
-    return generateByLevelsRecursion();
+    return [generateByLevelsRecursion(), nodesList];
 }
 
-const tree = generateTree({countNodes: 3000});
+const [tree, list] = generateTree({countNodes: 3000});
 
-fs.writeFileSync('./data.json', JSON.stringify(tree));
+fs.writeFileSync('./dataTree.json', JSON.stringify(tree[0]));
+fs.writeFileSync('./dataList.json', JSON.stringify(list))

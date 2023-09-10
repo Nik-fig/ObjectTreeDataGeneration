@@ -1,5 +1,5 @@
 const randomString = require("randomstring");
-const getRandomInt = require('getRandomInt');
+const getRandomInt = require('./getRandomInt');
 
 const propertiesTypes = ['yes/no', 'string', 'number', 'svg', 'table'];
 
@@ -34,4 +34,4 @@ function generateRandomProperties({maxCountProperties = 10}) {
     return properties;
 }
 
-module.exports = {generateRandomProperties};
+module.exports = generateRandomProperties;
